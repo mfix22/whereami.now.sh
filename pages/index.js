@@ -56,6 +56,16 @@ function Home(props) {
     color2 = hex((Number(position.coords.longitude) + 180) * (16777215 / 360))
   }
 
+  React.useEffect(() => {
+    if (position) {
+      if (Router.asPath === '/') {
+        Router.replace('/', `/${position.coords.latitude},${position.coords.longitude}`, {
+          shallow: true
+        })
+      }
+    }
+  }, [position])
+
   return (
     <div className="container">
       <Head>
