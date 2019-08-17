@@ -1,14 +1,17 @@
 import React from 'react'
 import domToImage from 'retina-dom-to-image'
+import Head from 'next/head'
+import Router from 'next/router'
 
 export const useGeoPosition = positionOptions => {
   const [position, setPosition] = React.useState(null)
 
   React.useEffect(() => {
     navigator.geolocation.getCurrentPosition(
-      p => {
-        console.log(p)
-        setPosition(p)
+      positionUpdate => {
+        if (positionUpdate) {
+          setPosition(positionUpdate)
+        }
       },
       console.error,
       positionOptions
@@ -17,7 +20,11 @@ export const useGeoPosition = positionOptions => {
 
   React.useEffect(() => {
     const listener = navigator.geolocation.watchPosition(
-      positionUpdate => setPosition(positionUpdate),
+      positionUpdate => {
+        if (positionUpdate) {
+          setPosition(positionUpdate)
+        }
+      },
       console.error,
       positionOptions
     )
@@ -38,8 +45,9 @@ function hex(x) {
     .toString(16)
     .padStart(6, '0')
 }
-const Home = () => {
-  const position = useGeoPosition(opts)
+function Home(props) {
+  const geoPosition = useGeoPosition(opts)
+  const position = props.initialPosition || geoPosition
 
   let color1
   let color2
@@ -50,6 +58,10 @@ const Home = () => {
 
   return (
     <div className="container">
+      <Head>
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Where am I right now?" />
+      </Head>
       <button
         className="share"
         onClick={() => {
@@ -147,7 +159,7 @@ const Home = () => {
             margin: 0;
             padding: 0;
             background: black;
-            background-image: ${color1 && color1
+            background-image: ${color1 && color2
               ? `linear-gradient(${(position && position.coords && position.coords.heading) ||
                   '90'}deg, #${color1}, #${color2});`
               : 'black'};

@@ -1,0 +1,17 @@
+{
+  "name": "whereamiright",
+  "alias": "whereamiright.now.sh",
+  "version": 2,
+  "builds": [
+    { "src": "package.json", "use": "@now/next@canary" },
+    { "src": "api/image.js", "use": "@now/node", "config": { "maxLambdaSize": "40mb" } }
+  ],
+  "routes": [
+    {
+      "src": "/api/image/?(?<id>[^/]*)",
+      "dest": "api/image.js?id=$id",
+      "methods": ["GET"]
+    },
+    { "handle": "filesystem" }
+  ]
+}
