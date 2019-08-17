@@ -59,6 +59,7 @@ function Home(props) {
   return (
     <div className="container">
       <Head>
+        <title>Where am I now?</title>
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="Where am I right now?" />
       </Head>
