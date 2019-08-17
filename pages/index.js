@@ -81,11 +81,13 @@ const Home = () => {
         Share
       </button>
       <div className="circle">
-        {position && (
+        {position ? (
           <div className="text">
             <div className="coord">{fixed(position.coords.latitude, 8)}</div>
             <div className="coord">{fixed(position.coords.longitude, 8)}</div>
           </div>
+        ) : (
+          <div className="text">Loading...</div>
         )}
       </div>
       <style jsx>
@@ -126,9 +128,9 @@ const Home = () => {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            font-size: 48px;
           }
           .coord {
-            font-size: 48px;
             font-variant-numeric: tabular-nums;
             text-shadow: 0 1px 0 black;
           }
@@ -139,12 +141,14 @@ const Home = () => {
           body {
             margin: 0;
             padding: 0;
+            background: black;
             background-image: ${color1 && color1
               ? `linear-gradient(${(position && position.coords && position.coords.heading) ||
                   '90'}deg, #${color1}, #${color2});`
               : 'black'};
             width: 100vw;
             height: 100vh;
+            font-family: sans-serif;
           }
         `}
       </style>
