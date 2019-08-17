@@ -16,9 +16,6 @@ export const useGeoPosition = positionOptions => {
       console.error,
       positionOptions
     )
-  }, [positionOptions])
-
-  React.useEffect(() => {
     const listener = navigator.geolocation.watchPosition(
       positionUpdate => {
         if (positionUpdate) {
@@ -61,15 +58,15 @@ function Home(props) {
   React.useEffect(() => {
     if (position) {
       const newPath = `/${position.coords.latitude},${position.coords.longitude}`
-      if (router.asPath !== newPath) {
+      if (router.asPath === '/') {
         router.replace(router.asPath, newPath, { shallow: true })
       }
     }
   }, [position, router])
 
   React.useEffect(() => {
-    ref.current = window.location.toString()
-  }, [router.asPath])
+    ref.current = window.location.href
+  }, [position])
 
   const { onClick, copied } = useCopyTextHandler(ref.current)
 
