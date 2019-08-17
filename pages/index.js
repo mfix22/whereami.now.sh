@@ -150,6 +150,9 @@ const Home = () => {
             height: 100vh;
             font-family: sans-serif;
           }
+          html {
+            overflow: hidden;
+          }
         `}
       </style>
     </div>
