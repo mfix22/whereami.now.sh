@@ -53,20 +53,20 @@ function Home(props) {
     color2 = hex((Number(position.coords.longitude) + 180) * (16777215 / 360))
   }
 
-  const ref = React.useRef('')
   const router = useRouter()
   React.useEffect(() => {
     if (position) {
-      const newPath = `/${position.coords.latitude},${position.coords.longitude}`
       if (router.asPath === '/') {
+        const newPath = `/${position.coords.latitude},${position.coords.longitude}`
         router.replace(router.asPath, newPath, { shallow: true })
       }
     }
   }, [position, router])
 
+  const ref = React.useRef('')
   React.useEffect(() => {
-    ref.current = window.location.href
-  }, [position])
+    ref.current = window.location.toString()
+  })
 
   const { onClick, copied } = useCopyTextHandler(ref.current)
 
