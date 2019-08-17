@@ -7,24 +7,14 @@ export const useGeoPosition = positionOptions => {
   const [position, setPosition] = React.useState(null)
 
   React.useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      positionUpdate => {
-        if (positionUpdate) {
-          setPosition(positionUpdate)
-        }
-      },
-      console.error,
-      positionOptions
-    )
-    const listener = navigator.geolocation.watchPosition(
-      positionUpdate => {
-        if (positionUpdate) {
-          setPosition(positionUpdate)
-        }
-      },
-      console.error,
-      positionOptions
-    )
+    function update(positionUpdate) {
+      if (positionUpdate) {
+        setPosition(positionUpdate)
+      }
+    }
+
+    navigator.geolocation.getCurrentPosition(update, console.error, positionOptions)
+    const listener = navigator.geolocation.watchPosition(update, console.error, positionOptions)
 
     return () => navigator.geolocation.clearWatch(listener)
   }, [positionOptions])
@@ -64,7 +54,6 @@ function Home(props) {
   }, [position, router])
 
   const ref = React.useRef('')
-
   const { onClick, copied } = useCopyTextHandler(ref.current)
 
   return (
