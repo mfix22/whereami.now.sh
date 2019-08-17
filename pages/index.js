@@ -64,9 +64,6 @@ function Home(props) {
   }, [position, router])
 
   const ref = React.useRef('')
-  React.useEffect(() => {
-    ref.current = window.location.toString()
-  })
 
   const { onClick, copied } = useCopyTextHandler(ref.current)
 
@@ -76,7 +73,13 @@ function Home(props) {
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="Where am I right now?" />
       </Head>
-      <button className="share" onClick={onClick}>
+      <button
+        className="share"
+        onClick={() => {
+          ref.current = window.location.toString()
+          onClick()
+        }}
+      >
         {copied ? 'Copied!' : 'Share'}
       </button>
       <div className="circle">
@@ -154,7 +157,7 @@ function Home(props) {
             background: black;
             background-image: ${color1 && color2
               ? `linear-gradient(${(position && position.coords && position.coords.heading) ||
-                  '90'}deg, #${color1}, #${color2});`
+                  '45'}deg, #${color1}, #${color2});`
               : 'black'};
             width: 100vw;
             height: 100vh;
