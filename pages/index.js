@@ -56,6 +56,14 @@ function Home(props) {
   const ref = React.useRef('')
   const { onClick, copied } = useCopyTextHandler(ref.current)
 
+  const [message, setMessage] = React.useState('Loading...')
+
+  React.useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      setMessage('Geolocation is not supported in your browser')
+    }
+  }, [])
+
   return (
     <div className="container">
       <Head>
@@ -80,7 +88,7 @@ function Home(props) {
             <div className="coord">{fixed(position.coords.longitude, 8)}</div>
           </div>
         ) : (
-          <div className="text">Loading...</div>
+          <div className="text message">{message}</div>
         )}
       </div>
       <style jsx>
@@ -124,6 +132,11 @@ function Home(props) {
             align-items: center;
             font-size: 48px;
           }
+          .message {
+            text-align: center;
+            max-width: 80%;
+            margin: 0 auto;
+          }
           .coord {
             font-variant-numeric: tabular-nums;
             text-shadow: 0 1px 0 black;
@@ -148,7 +161,7 @@ function Home(props) {
             background: black;
             background-image: ${color1 && color2
               ? `linear-gradient(${(position && position.coords && position.coords.heading) ||
-                  '45'}deg, #${color1}, #${color2});`
+                  '90'}deg, #${color1}, #${color2});`
               : 'black'};
             width: 100vw;
             height: 100vh;
