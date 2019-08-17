@@ -5,7 +5,14 @@ export const useGeoPosition = positionOptions => {
   const [position, setPosition] = React.useState(null)
 
   React.useEffect(() => {
-    navigator.geolocation.getCurrentPosition(p => setPosition(p), console.error, positionOptions)
+    navigator.geolocation.getCurrentPosition(
+      p => {
+        console.log(p)
+        setPosition(p)
+      },
+      console.error,
+      positionOptions
+    )
   }, [positionOptions])
 
   React.useEffect(() => {
@@ -37,15 +44,9 @@ const Home = () => {
   let color1
   let color2
   if (position) {
-    // console.log(position.coords.heading)
-
     color1 = hex((position.coords.latitude + 90) * (16777215 / 180))
     color2 = hex((position.coords.longitude + 180) * (16777215 / 360))
   }
-
-  React.useEffect(() => {
-    navigator.geolocation.getCurrentPosition(console.log, console.error, opts)
-  }, [])
 
   return (
     <div className="container">
@@ -60,12 +61,6 @@ const Home = () => {
                 }
                 return true
               }
-              // style: {
-              //   transform: `scale(2)`,
-              //   'transform-origin': 'center'
-              // },
-              // width: document.body.offsetWidth * 2,
-              // height: document.body.offsetHeight * 2
             })
             .then(data => window.URL.createObjectURL(data))
             .then(url => {
@@ -133,6 +128,16 @@ const Home = () => {
           .coord {
             font-variant-numeric: tabular-nums;
             text-shadow: 0 1px 0 black;
+          }
+
+          @media (max-width: 960px) {
+            .text {
+              font-size: 36px;
+            }
+            button {
+              top: 1rem;
+              right: 1rem;
+            }
           }
         `}
       </style>
