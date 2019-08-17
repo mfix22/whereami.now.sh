@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
 
     await page.waitForSelector('.coord', { visible: true, timeout: 9999 })
 
-    const dataUrl = await page.evaluate(id => {
+    const dataUrl = await page.evaluate(() => {
       const config = {
         filter: n => {
           if (n.className && String(n.className).indexOf('share') > -1) {
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
       }
 
       return domtoimage.toPng(document.body, config)
-    }, id)
+    })
 
     res.setHeader('Content-Type', 'image/png')
     const data = new Buffer(dataUrl.split(',')[1], 'base64')

@@ -1,7 +1,7 @@
 import React from 'react'
-import domToImage from 'retina-dom-to-image'
 import Head from 'next/head'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
+import { useCopyTextHandler } from 'actionsack'
 
 export const useGeoPosition = positionOptions => {
   const [position, setPosition] = React.useState(null)
@@ -56,15 +56,22 @@ function Home(props) {
     color2 = hex((Number(position.coords.longitude) + 180) * (16777215 / 360))
   }
 
+  const ref = React.useRef('')
+  const router = useRouter()
   React.useEffect(() => {
     if (position) {
-      if (Router.asPath === '/') {
-        Router.replace('/', `/${position.coords.latitude},${position.coords.longitude}`, {
-          shallow: true
-        })
+      const newPath = `/${position.coords.latitude},${position.coords.longitude}`
+      if (router.asPath !== newPath) {
+        router.replace(router.asPath, newPath, { shallow: true })
       }
     }
-  }, [position])
+  }, [position, router])
+
+  React.useEffect(() => {
+    ref.current = window.location.toString()
+  }, [router.asPath])
+
+  const { onClick, copied } = useCopyTextHandler(ref.current)
 
   return (
     <div className="container">
@@ -72,30 +79,8 @@ function Home(props) {
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="Where am I right now?" />
       </Head>
-      <button
-        className="share"
-        onClick={() => {
-          domToImage
-            .toBlob(document.body, {
-              filter: n => {
-                if (n.className && String(n.className).indexOf('share') > -1) {
-                  return false
-                }
-                return true
-              }
-            })
-            .then(data => window.URL.createObjectURL(data))
-            .then(url => {
-              const link = document.createElement('a')
-              link.download = `whereiamrightnow.png`
-              link.href = url
-              document.body.appendChild(link)
-              link.click()
-              link.remove()
-            })
-        }}
-      >
-        Share
+      <button className="share" onClick={onClick}>
+        {copied ? 'Copied!' : 'Share'}
       </button>
       <div className="circle">
         {position ? (
@@ -128,6 +113,7 @@ function Home(props) {
             color: #111;
             border-radius: 4px;
             cursor: pointer;
+            outline-color: white;
           }
           .circle {
             border-radius: 50%;

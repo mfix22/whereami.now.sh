@@ -4,7 +4,7 @@ import Head from 'next/head'
 import IndexPage from './index'
 
 class IdPage extends React.PureComponent {
-  static async getInitialProps({ req, res, asPath, query }) {
+  static async getInitialProps({ req, query }) {
     const [latitude, longitude] = query.id
       .split(',')
       .map(s => (typeof s === 'string' ? s.trim() : s))
