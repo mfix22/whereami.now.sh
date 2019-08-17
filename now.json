@@ -1,6 +1,6 @@
 {
-  "name": "whereamiright",
-  "alias": "whereamiright.now.sh",
+  "name": "whereami",
+  "alias": "whereami.now.sh",
   "version": 2,
   "builds": [
     { "src": "package.json", "use": "@now/next@canary" },

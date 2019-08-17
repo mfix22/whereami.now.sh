@@ -36,7 +36,7 @@ class IdPage extends React.PureComponent {
           <meta name="twitter:description" content={`${latitude}, ${longitude}`} />
           <meta
             name="twitter:image"
-            content={`https://${host || 'whereamiright.now.sh'}/api/image/${latLng}`}
+            content={`https://${host || 'whereami.now.sh'}/api/image/${latLng}`}
           />
         </Head>
         <IndexPage

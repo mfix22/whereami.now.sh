@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
   try {
     const page = await browser.newPage()
 
-    const host = (req.headers && req.headers.host) || 'https://whereamiright.now.sh/'
+    const host = (req.headers && req.headers.host) || 'https://whereami.now.sh/'
     await page.goto(`https://${host}/${id}`)
     await page.addScriptTag({
       url: 'https://unpkg.com/retina-dom-to-image@2.5.6/src/dom-to-image.js'
