@@ -52,8 +52,8 @@ function Home(props) {
   let color1
   let color2
   if (position) {
-    color1 = hex((position.coords.latitude + 90) * (16777215 / 180))
-    color2 = hex((position.coords.longitude + 180) * (16777215 / 360))
+    color1 = hex((Number(position.coords.latitude) + 90) * (16777215 / 180))
+    color2 = hex((Number(position.coords.longitude) + 180) * (16777215 / 360))
   }
 
   return (

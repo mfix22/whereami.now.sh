@@ -28,33 +28,12 @@ module.exports = async (req, res) => {
     await page.waitForSelector('.coord', { visible: true, timeout: 9999 })
 
     const dataUrl = await page.evaluate(id => {
-      const [latitude, longitude] = id.split(',').map(Number)
-
-      function hex(x) {
-        return Math.floor(x)
-          .toString(16)
-          .padStart(6, '0')
-      }
-
-      const color1 = hex((latitude + 90) * (16777215 / 180))
-      const color2 = hex((longitude + 180) * (16777215 / 360))
-
-      const gradient = `${
-        color1 && color2 ? `linear-gradient(90deg, #${color1}, #${color2})` : 'black'
-      }`
-
       const config = {
         filter: n => {
           if (n.className && String(n.className).indexOf('share') > -1) {
             return false
           }
           return true
-        },
-        bgcolor: gradient,
-        style: {
-          background: gradient,
-          backgroundImage: gradient,
-          'background-image': gradient
         }
       }
 
