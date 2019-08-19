@@ -2,6 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useCopyTextHandler } from 'actionsack'
+import domToImage from 'retina-dom-to-image'
 
 export const useGeoPosition = positionOptions => {
   const [position, setPosition] = React.useState(null)
@@ -22,16 +23,39 @@ export const useGeoPosition = positionOptions => {
   return position
 }
 
-const opts = { enableHighAccuracy: true }
-
 function fixed(x, n) {
   return Number(x).toFixed(n)
 }
+
 function hex(x) {
   return Math.floor(x)
     .toString(16)
     .padStart(6, '0')
 }
+
+function download() {
+  return domToImage
+    .toBlob(document.body, {
+      filter: n => {
+        if (n.className && String(n.className).indexOf('share') > -1) {
+          return false
+        }
+        return true
+      }
+    })
+    .then(data => window.URL.createObjectURL(data))
+    .then(url => {
+      const link = document.createElement('a')
+      link.download = `whereiam.now.png`
+      link.href = url
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+    })
+}
+
+const opts = { enableHighAccuracy: true }
+
 function Home(props) {
   const geoPosition = useGeoPosition(opts)
   const position = props.initialPosition || geoPosition
@@ -70,17 +94,22 @@ function Home(props) {
         <title>Where am I now?</title>
         <meta name="description" content="Find out where you are on this place we call Earth" />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="Where am I right now?" />
+        <meta name="twitter:title" content="Where am I now?" />
       </Head>
-      <button
-        className="share"
-        onClick={() => {
-          ref.current = window.location.toString()
-          onClick()
-        }}
-      >
-        {copied ? 'Copied!' : 'Share'}
-      </button>
+      <div className="share-buttons">
+        <button
+          className="share"
+          onClick={() => {
+            ref.current = window.location.toString()
+            onClick()
+          }}
+        >
+          {copied ? 'Copied!' : 'Share'}
+        </button>
+        <button className="share" onClick={download}>
+          Download
+        </button>
+      </div>
       <div className="circle">
         {position ? (
           <div className="text">
@@ -91,6 +120,11 @@ function Home(props) {
           <div className="text message">{message}</div>
         )}
       </div>
+      <footer>
+        <a href="https://github.com/mfix22/whereaminow" target="_blank" rel="noopener noreferrer">
+          source
+        </a>
+      </footer>
       <style jsx>
         {`
           .container {
@@ -101,18 +135,34 @@ function Home(props) {
             width: 100vw;
             height: 100vh;
           }
-          button {
+
+          .share-buttons {
             position: absolute;
+            top: 1rem;
+            right: 1rem;
+          }
+
+          footer {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+          }
+          footer a {
+            color: black;
+            font-size: 20px;
+            outline-color: white;
+          }
+
+          button {
             appearance: none;
             border: 2px solid #111;
             background: transparent;
-            top: 1rem;
-            right: 2rem;
             font-size: 24px;
             color: #111;
             border-radius: 4px;
             cursor: pointer;
             outline-color: white;
+            margin-right: 0.5rem;
           }
           .circle {
             border-radius: 50%;
@@ -145,10 +195,6 @@ function Home(props) {
           @media (max-width: 960px) {
             .text {
               font-size: 36px;
-            }
-            button {
-              top: 1rem;
-              right: 1rem;
             }
           }
         `}
