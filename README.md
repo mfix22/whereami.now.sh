@@ -8,8 +8,6 @@
 <br>
 <br>
 
-> trying to answer the question: "where am I?"
-
 ![Example image](static/example.png)
 
 ## Use Cases
