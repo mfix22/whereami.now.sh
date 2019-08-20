@@ -12,6 +12,12 @@
 
 ![Example image](static/example.png)
 
+## Use Cases
+
+1. Filling out the front page of your Field Notes
+2. Marking new bouldering first ascents
+3. Geocaching obv.
+
 ## Share
 
 1. Open [whereami.now.sh](http://whereami.now.sh)
