@@ -12,7 +12,7 @@
 
 ## Use Cases
 
-1. Filling out the front page of your Field Notes
+1. Filling out the front page of your Field Notes®
 2. Marking new bouldering first ascents
 3. Geocaching obv.
 
