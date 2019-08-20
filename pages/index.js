@@ -120,8 +120,12 @@ function Home(props) {
           <div className="text message">{message}</div>
         )}
       </div>
-      <footer>
-        <a href="https://github.com/mfix22/whereaminow" target="_blank" rel="noopener noreferrer">
+      <footer className="share">
+        <a
+          href="https://github.com/mfix22/whereami.now.sh"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           source
         </a>
       </footer>
