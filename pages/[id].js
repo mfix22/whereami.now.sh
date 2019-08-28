@@ -5,7 +5,7 @@ import IndexPage from './index'
 
 class IdPage extends React.PureComponent {
   static async getInitialProps({ req, query }) {
-    const [latitude, longitude] = query.id
+    const [latitude, longitude, heading] = query.id
       .split(',')
       .map(s => (typeof s === 'string' ? s.trim() : s))
 
@@ -13,7 +13,8 @@ class IdPage extends React.PureComponent {
       return {
         host: req.host,
         latitude,
-        longitude
+        longitude,
+        heading
       }
     }
 
@@ -21,7 +22,7 @@ class IdPage extends React.PureComponent {
   }
 
   render() {
-    const { latitude, longitude, host } = this.props
+    const { latitude, longitude, heading, host } = this.props
 
     if (!latitude || !longitude) {
       return <IndexPage />
@@ -43,7 +44,8 @@ class IdPage extends React.PureComponent {
           initialPosition={{
             coords: {
               latitude,
-              longitude
+              longitude,
+              heading
             }
           }}
         />

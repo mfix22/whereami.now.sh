@@ -92,6 +92,8 @@ function Home(props) {
     }
   }, [])
 
+  const degree = clamp(position && position.coords && position.coords.heading, 0, 360) || 90
+
   return (
     <div className="container">
       <Head>
@@ -214,8 +216,7 @@ function Home(props) {
             padding: 0;
             background: black;
             background-image: ${color1 && color2
-              ? `linear-gradient(${(position && position.coords && position.coords.heading) ||
-                  '90'}deg, #${color1}, #${color2});`
+              ? `linear-gradient(${degree}deg, #${color1}, #${color2});`
               : 'black'};
             width: 100vw;
             height: 100vh;
