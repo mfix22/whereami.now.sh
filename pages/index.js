@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useCopyTextHandler } from 'actionsack'
+import { useCopyTextHandler, useKeyboardListener } from 'actionsack'
 import domToImage from 'retina-dom-to-image'
 
 export const useGeoPosition = positionOptions => {
@@ -33,12 +33,15 @@ function hex(x) {
     .padStart(6, '0')
 }
 
-function download() {
+function download(e, removeAll = false) {
   return domToImage
     .toBlob(document.body, {
       filter: n => {
         if (n.className && String(n.className).indexOf('share') > -1) {
           return false
+        }
+        if (n.className && String(n.className).indexOf('container') > -1) {
+          return !removeAll
         }
         return true
       }
@@ -93,6 +96,12 @@ function Home(props) {
   }, [])
 
   const degree = clamp(position && position.coords && position.coords.heading, 0, 360) || 90
+
+  useKeyboardListener('e', e => {
+    if (e.metaKey && e.shiftKey) {
+      download(e, true)
+    }
+  })
 
   return (
     <div className="container">
