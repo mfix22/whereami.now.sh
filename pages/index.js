@@ -33,15 +33,12 @@ function hex(x) {
     .padStart(6, '0')
 }
 
-function download(e, removeAll = false) {
+function download(e, filterList = ['share']) {
   return domToImage
     .toBlob(document.body, {
       filter: n => {
-        if (n.className && String(n.className).indexOf('share') > -1) {
+        if (n.className && filterList.some(c => String(n.className).indexOf(c) > -1)) {
           return false
-        }
-        if (n.className && String(n.className).indexOf('container') > -1) {
-          return !removeAll
         }
         return true
       }
@@ -99,7 +96,7 @@ function Home(props) {
 
   useKeyboardListener('e', e => {
     if (e.metaKey && e.shiftKey) {
-      download(e, true)
+      download(e, ['share', 'container'])
     }
   })
 
