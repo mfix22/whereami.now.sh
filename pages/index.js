@@ -2,7 +2,8 @@ import React from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useCopyTextHandler, useKeyboardListener } from 'actionsack'
-import domToImage from 'retina-dom-to-image'
+import domToImage from 'dom-to-image'
+import retinaDomToImage from 'retina-dom-to-image'
 
 export const useGeoPosition = positionOptions => {
   const [position, setPosition] = React.useState(null)
@@ -33,16 +34,32 @@ function hex(x) {
     .padStart(6, '0')
 }
 
-function download(e, filterList = ['share']) {
-  return domToImage
-    .toBlob(document.body, {
-      filter: n => {
-        if (n.className && filterList.some(c => String(n.className).indexOf(c) > -1)) {
-          return false
-        }
-        return true
+function download(e, filterList = ['share'], square) {
+  const options = {
+    filter: n => {
+      if (n.className && filterList.some(c => String(n.className).indexOf(c) > -1)) {
+        return false
       }
-    })
+      return true
+    }
+  }
+  if (square) {
+    options.width = document.body.clientWidth
+    options.height = document.body.clientWidth
+    return domToImage
+      .toBlob(document.body, options)
+      .then(data => window.URL.createObjectURL(data))
+      .then(url => {
+        const link = document.createElement('a')
+        link.download = `whereiam.now.png`
+        link.href = url
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+      })
+  }
+  return retinaDomToImage
+    .toBlob(document.body, options)
     .then(data => window.URL.createObjectURL(data))
     .then(url => {
       const link = document.createElement('a')
@@ -96,7 +113,7 @@ function Home(props) {
 
   useKeyboardListener('e', e => {
     if (e.metaKey && e.shiftKey) {
-      download(e, ['share', 'container'])
+      download(e, ['share', 'container'], true)
     }
   })
 
